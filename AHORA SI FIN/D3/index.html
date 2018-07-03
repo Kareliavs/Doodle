@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    .selection {
+  fill: #ADD8E6;
+  stroke: #ADD8E6;
+  fill-opacity: 0.3;
+  stroke-opacity: 0.7;
+  stroke-width: 2;
+  stroke-dasharray: 5, 5;
+}
+  </style>
+</head>
+
+<body>
+  <script>
+    //python3 -m http.server
+    var xini,yini,xfin,yfin =0;
+    var width = 5000;
+    var height = 1000;
+    var blur = .8628;
+    var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    var g = svg.append("g") // for our zoom
+        
+    d3.json("Airplanetsne.ndjson", function(err, drawings) {
+    // check the console to see the data format!
+    console.log(drawings);
+
+    var line =  d3.line()
+      .x(function(d) { return d.x })
+      .y(function(d) { return d.y })
+      .curve(d3.curveBasis)
+
+    var spacing = 0;
+    var groups = g.selectAll("g.drawing").data(drawings)
+    //alert(groups)
+    var groupsE = groups.enter().append("g")
+    	.classed("drawing", true)
+      .attr("transform", function(d,i) {
+        // lay them out in a grid
+        //var x = -width + (i % 30) * spacing;
+        //var y = -height + Math.floor(i/30) * spacing
+        console.log(d.cx*10+500,d.cy*10+500)
+        return "translate(" + [d.cx*10+500,d.cy*10+500] + ")scale(0.07)" 
+      })
+    	// we style the groups instead of the individual paths for a slight performance boost
+      .style("fill", "none")
+      .style("stroke", "#111")
+      .style("stroke-width", 9)
+      .on("click", function(d) { console.log(d); alert(d) })
+       //.style("stroke-opacity", 0.5)
+    var pathsE = groupsE.selectAll("path.stroke").data(function(d) { 
+      // the data for each path is an array of points
+      // but it doesn't start that way
+      // the original format is [ [x0,x1,x2...], [y0,y1,y2...]]
+      return d.drawing.map(function(s) {
+        var points = []
+        s[0].forEach(function(x,i) {
+          points.push({x: x, y: s[1][i] })
+        })
+        return points;
+      })
+    }).enter().append("path").classed("stroke", true)
+    
+    pathsE
+      .attr("d", line)
+    
+    var zoom = d3.zoom()
+      .scaleExtent([1/12, 4])
+      .on("zoom", function() {
+        g.attr("transform", d3.event.transform)
+      })
+    svg.call(zoom)
+    ////////////////////////////
+    function rect(x, y, w, h) {
+      return "M"+[x,y]+" l"+[w,0]+" l"+[0,h]+" l"+[-w,0]+"z";
+    }
+
+    var selection = svg.append("path")
+      .attr("class", "selection")
+      .attr("visibility", "hidden");
+
+    var startSelection = function(start) {
+        selection.attr("d", rect(start[0], start[0], 0, 0))
+          .attr("visibility", "visible");
+    };
+
+    var moveSelection = function(start, moved) {
+        selection.attr("d", rect(start[0], start[1], moved[0]-start[0], moved[1]-start[1]));
+        xini=start[0];
+        yini=start[1];
+        xfin= moved[0];
+        yfin= moved[1];
+        //console.log(xini," hola 1" , yini," hola 2" , xfin ," hola 4" , yfin );
+    };
+
+    var endSelection = function(start, end) {
+      selection.attr("visibility", "hidden");
+    };
+
+    svg.on("contextmenu", function() {
+      d3.event.preventDefault();
+      var subject = d3.select(window), parent = this.parentNode,
+          start = d3.mouse(parent);
+        startSelection(start);
+        subject
+          .on("mousemove.selection", function() {
+            moveSelection(start, d3.mouse(parent));
+          }).on("mouseup.selection", function() {
+            endSelection(start, d3.mouse(parent));
+            subject.on("mousemove.selection", null).on("mouseup.selection", null);
+          });
+    });
+
+    svg.on("touchstart", function() {
+      var subject = d3.select(this), parent = this.parentNode,
+          id = d3.event.changedTouches[0].identifier,
+          start = d3.touch(parent, id), pos;
+        startSelection(start);
+        subject
+          .on("touchmove."+id, function() {
+            if (pos = d3.touch(parent, id)) {
+              moveSelection(start, pos);
+            }
+          }).on("touchend."+id, function() {
+            if (pos = d3.touch(parent, id)) {
+              endSelection(start, pos);
+              subject.on("touchmove."+id, null).on("touchend."+id, null);
+            }
+          });
+    });
+
+        ////////////////////////////
+
+
+
+
+  })
+    
+  
+
+  </script>
+  <!---<script src="draw.js"></script>-->
+</body>
