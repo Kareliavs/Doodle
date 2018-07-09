@@ -356,12 +356,14 @@
                           .attr("class", "graph-svg-component");
     var g1 = svg1.append("g")
     var groups1 = g1.selectAll("g.drawing").data(drawings);
+    var varit=0;
     //////////////////////////////////////////////////////////
-    svg.on("d3-context-menu",function() {
+    svg.on("contextmenu",function() {
       d3.event.preventDefault();
       var subject = d3.select(window), parent = this.parentNode,
           start = d3.mouse(parent);
         startSelection(start);
+	    if(varit !=2){
         d3.selectAll( 'g.state').each( function( d, i) {d3.select( this).classed( "selection", false).classed( "selected", false);});
         variable=0;
 	console.log("Here1");
@@ -477,10 +479,13 @@
 
             }
         });
+	varit=1;
+	}
           }).on("mouseup.selection", function() {
             endSelection(start, d3.mouse(parent));
             subject.on("mousemove.selection", null).on("mouseup.selection", null);
             console.log("here2");
+		vsrit=2;
           });
     });
 
