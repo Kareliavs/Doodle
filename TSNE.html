@@ -357,7 +357,7 @@
     var g1 = svg1.append("g")
     var groups1 = g1.selectAll("g.drawing").data(drawings);
     //////////////////////////////////////////////////////////
-    svg.on("click.d3-context-menu",function() {
+    svg.on("d3-context-menu",function() {
       d3.event.preventDefault();
       var subject = d3.select(window), parent = this.parentNode,
           start = d3.mouse(parent);
