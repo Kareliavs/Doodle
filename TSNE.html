@@ -370,6 +370,7 @@
         svg0.attr("height", alto);
         svg0.selectAll("*").remove();
         svg1.selectAll("*").remove();
+	    }
         subject
           .on("mousemove.selection", function() {
             moveSelection(start, d3.mouse(parent));
@@ -479,13 +480,11 @@
 
             }
         });
-	varit=1;
-	}
           }).on("mouseup.selection", function() {
             endSelection(start, d3.mouse(parent));
             subject.on("mousemove.selection", null).on("mouseup.selection", null);
             console.log("here2");
-		vsrit=2;
+		varit=2;
           });
     });
 
