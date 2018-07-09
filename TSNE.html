@@ -364,6 +364,7 @@
         startSelection(start);
         d3.selectAll( 'g.state').each( function( d, i) {d3.select( this).classed( "selection", false).classed( "selected", false);});
         variable=0;
+	console.log("Here1");
         svg0.attr("height", alto);
         svg0.selectAll("*").remove();
         svg1.selectAll("*").remove();
@@ -372,7 +373,6 @@
             moveSelection(start, d3.mouse(parent));
             d3.selectAll( 'g.state').each( function( d, i) {
 		
-		    console.log("Here1");
               /*d3.select( this)
                 .classed( "selection", false)
                 .classed( "selected", false);*/
