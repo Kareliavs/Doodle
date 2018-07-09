@@ -8,12 +8,12 @@ from sklearn import preprocessing
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 import json
-contenido=open('Airplanetsne.ndjson', "r+")
+contenido=open('allsimpletsne.ndjson', "r+")
 archivos =json.load(contenido)
 def main():
 	"""Load data."""
 	try:
-		csvfile = "Airplane.csv"#sys.argv[1]
+		csvfile = "all.csv"#sys.argv[1]
 	except IndexError:
 		print '%s\n\nUsage: %s [--3d] <csv_file>' % (__doc__, sys.argv[0])
 		return
@@ -50,7 +50,7 @@ def plotpca(xdata, ydata, target_names, items, filename):
 
 	# NB: a maximum of 7 targets will be plotted
 	j=1
-	for i in range(1000):#, (c, m, target_name) in enumerate(zip(
+	for i in range(8000):#, (c, m, target_name) in enumerate(zip(
 			#'rbmkycg', 'o^s*v+x', target_names)):
 		#print("hola",i)
 		j=j+1
@@ -64,9 +64,9 @@ def plotpca(xdata, ydata, target_names, items, filename):
 				(ydata == i).nonzero()[0],
 				components[ydata == i, 0],
 				components[ydata == i, 1]):
-			if n<1000:			
-				archivos[n]['cx'] = round(x, 14)
-				archivos[n]['cy'] = round(y, 14)
+			if n<8000:			
+				archivos[n]['cx'] = round(x, 3)
+				archivos[n]['cy'] = round(y, 3)
 				print(x,y)
 		
 			#pl.annotate(

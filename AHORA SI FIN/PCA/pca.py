@@ -7,12 +7,12 @@ import pylab as pl
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
 import json
-contenido=open('Airplane.ndjson', "r+")
+contenido=open('allsimple.ndjson', "r+")
 archivos =json.load(contenido)
 def main():
 	"""Load data."""
 	try:
-		csvfile = "Airplanetsne.csv"#sys.argv[1]
+		csvfile = "all.csv"#sys.argv[1]
 	except IndexError:
 		print '%s\n\nUsage: %s [--3d] <csv_file>' % (__doc__, sys.argv[0])
 		return
@@ -49,7 +49,7 @@ def plotpca(xdata, ydata, target_names, items, filename):
 
 	# NB: a maximum of 7 targets will be plotted
 	j=1
-	for i in range(1000):#, (c, m, target_name) in enumerate(zip(
+	for i in range(8000):#, (c, m, target_name) in enumerate(zip(
 			#'rbmkycg', 'o^s*v+x', target_names)):
 		print("hola",i)
 		j=j+1
@@ -63,9 +63,9 @@ def plotpca(xdata, ydata, target_names, items, filename):
 				(ydata == i).nonzero()[0],
 				components[ydata == i, 0],
 				components[ydata == i, 1]):
-			if n<1000:			
-				archivos[n]['cx'] = x
-				archivos[n]['cy'] = y
+			if n<8000:			
+				archivos[n]['cx'] = round(x, 3)
+				archivos[n]['cy'] = round(y, 3)
 		
 			#pl.annotate(
 			#		items[n],
