@@ -363,17 +363,18 @@
       var subject = d3.select(window), parent = this.parentNode,
           start = d3.mouse(parent);
         startSelection(start);
-	    if(varit !=2){
-        d3.selectAll( 'g.state').each( function( d, i) {d3.select( this).classed( "selection", false).classed( "selected", false);});
-        variable=0;
-	console.log("Here1");
-        svg0.attr("height", alto);
-        svg0.selectAll("*").remove();
-        svg1.selectAll("*").remove();
+	if(varit !=2){
+		d3.selectAll( 'g.state').each( function( d, i) {d3.select( this).classed( "selection", false).classed( "selected", false);});
+		variable=0;
+		console.log("Here1");
+		svg0.attr("height", alto);
+		svg0.selectAll("*").remove();
+		svg1.selectAll("*").remove();
 	    }
-	    varit=1;
+	   
         subject
           .on("mousemove.selection", function() {
+	    varit=1;
             moveSelection(start, d3.mouse(parent));
             d3.selectAll( 'g.state').each( function( d, i) {
 		
